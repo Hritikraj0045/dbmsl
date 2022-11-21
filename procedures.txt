@@ -1,0 +1,123 @@
+mysql> use database procedures;
+ERROR 1049 (42000): Unknown database 'database'
+mysql> use procedures;
+Database changed
+mysql> show tables;
++----------------------+
+| Tables_in_procedures |
++----------------------+
+| stud_marks           |
++----------------------+
+1 row in set (0.03 sec)
+
+mysql> insert into stud_marks(101,'abc',953),(102,'xyz', 356),(103,'mnk', 450),(104,'pqr', 675),(105,'snk', 1300),(106,'jnk', 250);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '101,'abc',953),(102,'xyz', 356),(103,'mnk', 450),(104,'pqr', 675),(105,'snk', 13' at line 1
+mysql> insert into stud_marks values (101,'abc',953),(102,'xyz', 356),(103,'mnk', 450),(104,'pqr', 675),(105,'snk', 1300),(106,'jnk', 250);
+Query OK, 6 rows affected (0.04 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+mysql> select * from stud_marks;
++---------+------+-------------+
+| roll_no | name | total_marks |
++---------+------+-------------+
+|     101 | abc  |         953 |
+|     102 | xyz  |         356 |
+|     103 | mnk  |         450 |
+|     104 | pqr  |         675 |
+|     105 | snk  |        1300 |
+|     106 | jnk  |         250 |
++---------+------+-------------+
+6 rows in set (0.00 sec)
+
+mysql> delimiter @@
+mysql> create procedure proc_grade(in marks int, out class char(10))
+    -> begin
+    -> if marks<=1500 and marks>=990 then set class='DIST';
+    -> end if;
+    -> if marks<=989 and marks>=900 then set class='FC';
+    -> end if;
+    -> if marks<=899 and marks>=825 then set class='HSC';
+    -> end if;
+    -> if marks<=824 and marks>=750 then set class='SC';
+    -> end if;
+    -> if marks<=749 and marks>=650 then set class='PC';
+    -> end if;
+    -> if marks < 650 then set class='fail';
+    -> end if;
+    -> end ;
+    -> @@
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> create function find_result(roll_in int) returns int deterministic
+    -> begin
+    -> declare fmarks int;
+    -> declare grade char(10);
+    -> declare stud_name char(10);
+    -> select stud_marks.total_marks,stud_marks.name into fmarks, stud_name from stud_marks where stud_marks.roll_no=roll_in;
+    -> call proc_grade(fmarks,@grade);
+    -> insert into result values(roll_in,stud_name, @grade);
+    -> return roll_in;
+    -> end;
+    -> @@
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> select find_result(105);
+    -> @@
+ERROR 1146 (42S02): Table 'procedures.result' doesn't exist
+mysql> create table result (roll_no int, name char(30), class char(20));
+    -> @@
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> select find_result(105);@@
++------------------+
+| find_result(105) |
++------------------+
+|              105 |
++------------------+
+1 row in set (0.02 sec)
+
+mysql> select * from result;
+    -> @@
++---------+------+-------+
+| roll_no | name | class |
++---------+------+-------+
+|     105 | snk  | DIST  |
++---------+------+-------+
+1 row in set (0.00 sec)
+
+mysql> select find_result(104),(101),(102);@@
++------------------+-----+-----+
+| find_result(104) | 101 | 102 |
++------------------+-----+-----+
+|              104 | 101 | 102 |
++------------------+-----+-----+
+1 row in set (0.02 sec)
+
+mysql> select * from result;
+    -> @@
++---------+------+-------+
+| roll_no | name | class |
++---------+------+-------+
+|     105 | snk  | DIST  |
+|     104 | pqr  | PC    |
++---------+------+-------+
+2 rows in set (0.00 sec)
+
+mysql> select find_result(103);@@
++------------------+
+| find_result(103) |
++------------------+
+|              103 |
++------------------+
+1 row in set (0.01 sec)
+
+mysql> select * from result;
+    -> @@
++---------+------+-------+
+| roll_no | name | class |
++---------+------+-------+
+|     105 | snk  | DIST  |
+|     104 | pqr  | PC    |
+|     103 | mnk  | fail  |
++---------+------+-------+
+3 rows in set (0.00 sec)

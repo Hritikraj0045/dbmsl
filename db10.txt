@@ -1,0 +1,328 @@
+create insert display--------------------------------
+> use School;
+switched to db School
+> db.createCollection('Student');
+{ "ok" : 1 }
+> db.Student.insert({'Rno':1,'Name':'Pratham','Marks':75});
+WriteResult({ "nInserted" : 1 })
+> db.Student.find().pretty();
+{
+        "_id" : ObjectId("6374c1de0b33b1df5f3897f7"),
+        "Rno" : 1,
+        "Name" : "Pratham",
+        "Marks" : 75
+}
+> db.Student.insertMany([{'Rno':2,'Name':'Yash','Marks':74},{'Rno':3,'Name':'Mahesh','Marks':73}]);
+{
+        "acknowledged" : true,
+        "insertedIds" : [
+                ObjectId("6374c25f0b33b1df5f3897f8"),
+                ObjectId("6374c25f0b33b1df5f3897f9")
+        ]
+}
+> db.Student.find().pretty();
+{
+        "_id" : ObjectId("6374c1de0b33b1df5f3897f7"),
+        "Rno" : 1,
+        "Name" : "Pratham",
+        "Marks" : 75
+}
+{
+        "_id" : ObjectId("6374c25f0b33b1df5f3897f8"),
+        "Rno" : 2,
+        "Name" : "Yash",
+        "Marks" : 74
+}
+{
+        "_id" : ObjectId("6374c25f0b33b1df5f3897f9"),
+        "Rno" : 3,
+        "Name" : "Mahesh",
+        "Marks" : 73
+}
+> db.Student.insertMany([{'Rno':4,'Name':'Pranav','Marks':72},{'Rno':5,'Name':'Om','Marks':71}]);
+{
+        "acknowledged" : true,
+        "insertedIds" : [
+                ObjectId("6374c28e0b33b1df5f3897fa"),
+                ObjectId("6374c28e0b33b1df5f3897fb")
+        ]
+}
+> db.Student.find().pretty();
+{
+        "_id" : ObjectId("6374c1de0b33b1df5f3897f7"),
+        "Rno" : 1,
+        "Name" : "Pratham",
+        "Marks" : 75
+}
+{
+        "_id" : ObjectId("6374c25f0b33b1df5f3897f8"),
+        "Rno" : 2,
+        "Name" : "Yash",
+        "Marks" : 74
+}
+{
+        "_id" : ObjectId("6374c25f0b33b1df5f3897f9"),
+        "Rno" : 3,
+        "Name" : "Mahesh",
+        "Marks" : 73
+}
+{
+        "_id" : ObjectId("6374c28e0b33b1df5f3897fa"),
+        "Rno" : 4,
+        "Name" : "Pranav",
+        "Marks" : 72
+}
+{
+        "_id" : ObjectId("6374c28e0b33b1df5f3897fb"),
+        "Rno" : 5,
+        "Name" : "Om",
+        "Marks" : 71
+}
+
+
+
+UPDATE--------------------------------------------------
+
+ db.Student.update({'Marks':75},{$set:{'Marks':90}});
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+> db.Student.find().pretty();
+{
+        "_id" : ObjectId("6374c1de0b33b1df5f3897f7"),
+        "Rno" : 1,
+        "Name" : "Pratham",
+        "Marks" : 90
+}
+{
+        "_id" : ObjectId("6374c25f0b33b1df5f3897f8"),
+        "Rno" : 2,
+        "Name" : "Yash",
+        "Marks" : 74
+}
+{
+        "_id" : ObjectId("6374c25f0b33b1df5f3897f9"),
+        "Rno" : 3,
+        "Name" : "Mahesh",
+        "Marks" : 73
+}
+{
+        "_id" : ObjectId("6374c28e0b33b1df5f3897fa"),
+        "Rno" : 4,
+        "Name" : "Pranav",
+        "Marks" : 72
+}
+{
+        "_id" : ObjectId("6374c28e0b33b1df5f3897fb"),
+        "Rno" : 5,
+        "Name" : "Om",
+        "Marks" : 71
+}
+
+
+REMOVE-------------------------------------------------------
+
+> db.Student.remove({'Marks':71});
+WriteResult({ "nRemoved" : 1 })
+> db.student.find().pretty()
+> db.Student.find().pretty();
+{
+        "_id" : ObjectId("6374c1de0b33b1df5f3897f7"),
+        "Rno" : 1,
+        "Name" : "Pratham",
+        "Marks" : 90
+}
+{
+        "_id" : ObjectId("6374c6814b9070ac826617f9"),
+        "Rno" : 1,
+        "Name" : "Pratham",
+        "Marks" : 75
+}
+{
+        "_id" : ObjectId("6374c6874b9070ac826617fa"),
+        "Rno" : 2,
+        "Name" : "Yash",
+        "Marks" : 74
+}
+{
+        "_id" : ObjectId("6374c6874b9070ac826617fb"),
+        "Rno" : 3,
+        "Name" : "Mahesh",
+        "Marks" : 73
+}
+{
+        "_id" : ObjectId("6374c68b4b9070ac826617fc"),
+        "Rno" : 4,
+        "Name" : "Pranav",
+        "Marks" : 72
+}
+
+
+
+LOGICAL OPERATORS-------------------------------------------------------
+
+
+> db.Student.find({$and:[{'Name':'Pratham'},{'Rno':2}]}).pretty();
+> db.Student.find({$or:[{'Name':'Pratham'},{'Rno':2}]}).pretty();
+{
+        "_id" : ObjectId("6374c1de0b33b1df5f3897f7"),
+        "Rno" : 1,
+        "Name" : "Pratham",
+        "Marks" : 90
+}
+{
+        "_id" : ObjectId("6374c25f0b33b1df5f3897f8"),
+        "Rno" : 2,
+        "Name" : "Yash",
+        "Marks" : 74
+}
+> db.Student.find({$or:[{'Name':'Pratham'},{'Rno':1}]}).pretty();
+{
+        "_id" : ObjectId("6374c1de0b33b1df5f3897f7"),
+        "Rno" : 1,
+        "Name" : "Pratham",
+        "Marks" : 90
+}
+> db.Student.find({$or:[{'Name':'Hitesh'},{'Rno':1}]}).pretty();
+{
+        "_id" : ObjectId("6374c1de0b33b1df5f3897f7"),
+        "Rno" : 1,
+        "Name" : "Pratham",
+        "Marks" : 90
+}
+> db.Student.find({$nor:[{'Name':'Hitesh'},{'Rno':1}]}).pretty();
+{
+        "_id" : ObjectId("6374c25f0b33b1df5f3897f8"),
+        "Rno" : 2,
+        "Name" : "Yash",
+        "Marks" : 74
+}
+{
+        "_id" : ObjectId("6374c25f0b33b1df5f3897f9"),
+        "Rno" : 3,
+        "Name" : "Mahesh",
+        "Marks" : 73
+}
+{
+        "_id" : ObjectId("6374c28e0b33b1df5f3897fa"),
+        "Rno" : 4,
+        "Name" : "Pranav",
+        "Marks" : 72
+}
+{
+        "_id" : ObjectId("6374c28e0b33b1df5f3897fb"),
+        "Rno" : 5,
+        "Name" : "Om",
+        "Marks" : 71
+}
+> db.Student.find({$nor:[{'Name':'Pratham'},{'Rno':1}]}).pretty();
+{
+        "_id" : ObjectId("6374c25f0b33b1df5f3897f8"),
+        "Rno" : 2,
+        "Name" : "Yash",
+        "Marks" : 74
+}
+{
+        "_id" : ObjectId("6374c25f0b33b1df5f3897f9"),
+        "Rno" : 3,
+        "Name" : "Mahesh",
+        "Marks" : 73
+}
+{
+        "_id" : ObjectId("6374c28e0b33b1df5f3897fa"),
+        "Rno" : 4,
+        "Name" : "Pranav",
+        "Marks" : 72
+}
+{
+        "_id" : ObjectId("6374c28e0b33b1df5f3897fb"),
+        "Rno" : 5,
+        "Name" : "Om",
+        "Marks" : 71
+}
+
+
+
+Arithmetic Operators---------------------------------------------------------------
+
+> db.Student.find({'Marks':{$gt:74}}).pretty()
+{
+        "_id" : ObjectId("6374c1de0b33b1df5f3897f7"),
+        "Rno" : 1,
+        "Name" : "Pratham",
+        "Marks" : 90
+}
+{
+        "_id" : ObjectId("6374c6814b9070ac826617f9"),
+        "Rno" : 1,
+        "Name" : "Pratham",
+        "Marks" : 75
+}
+> db.Student.find({'Marks':{$lt:74}}).pretty()
+{
+        "_id" : ObjectId("6374c6874b9070ac826617fb"),
+        "Rno" : 3,
+        "Name" : "Mahesh",
+        "Marks" : 73
+}
+{
+        "_id" : ObjectId("6374c68b4b9070ac826617fc"),
+        "Rno" : 4,
+        "Name" : "Pranav",
+        "Marks" : 72
+}
+> db.Student.find({'Marks':{$lte:74}}).pretty()
+{
+        "_id" : ObjectId("6374c6874b9070ac826617fa"),
+        "Rno" : 2,
+        "Name" : "Yash",
+        "Marks" : 74
+}
+{
+        "_id" : ObjectId("6374c6874b9070ac826617fb"),
+        "Rno" : 3,
+        "Name" : "Mahesh",
+        "Marks" : 73
+}
+{
+        "_id" : ObjectId("6374c68b4b9070ac826617fc"),
+        "Rno" : 4,
+        "Name" : "Pranav",
+        "Marks" : 72
+}
+> db.Student.find({'Marks':{$gte:74}}).pretty()
+{
+        "_id" : ObjectId("6374c1de0b33b1df5f3897f7"),
+        "Rno" : 1,
+        "Name" : "Pratham",
+        "Marks" : 90
+}
+{
+        "_id" : ObjectId("6374c6814b9070ac826617f9"),
+        "Rno" : 1,
+        "Name" : "Pratham",
+        "Marks" : 75
+}
+{
+        "_id" : ObjectId("6374c6874b9070ac826617fa"),
+        "Rno" : 2,
+        "Name" : "Yash",
+        "Marks" : 74
+}
+> db.Student.find({'Marks':{$not:{$lt:74}}}).pretty()
+{
+        "_id" : ObjectId("6374c1de0b33b1df5f3897f7"),
+        "Rno" : 1,
+        "Name" : "Pratham",
+        "Marks" : 90
+}
+{
+        "_id" : ObjectId("6374c6814b9070ac826617f9"),
+        "Rno" : 1,
+        "Name" : "Pratham",
+        "Marks" : 75
+}
+{
+        "_id" : ObjectId("6374c6874b9070ac826617fa"),
+        "Rno" : 2,
+        "Name" : "Yash",
+        "Marks" : 74
+}

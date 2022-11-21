@@ -1,0 +1,66 @@
+
+
+ create database dml;
+
+
+ use dml;
+
+ create table emp(emp_id int primary key,emp_fname char(20),emp_lname char(20), emp_salary int , join_date date);
+
+
+ desc emp;
+
+ insert into emp values(1,'Ram','Kapoor',20000,'2015-02-23');
+
+
+ insert into emp values(2,'Raj','Kapoor',10000,'2016-07-13');
+
+
+ insert into emp values(3,'Ramesh','Kapoor',1000,'2016-05-15');
+
+
+ select * from emp;
+
+
+ update emp set emp_salary=30000 where emp_id=3;
+
+
+ select * from emp;
+
+
+ delete from emp where emp_id=3;
+
+
+ select * from emp;
+
+
+ insert into emp values(3,'Ramesh','Kapoor',1000,'2016-05-15');
+
+
+ select * from emp;
+
+
+ select avg(emp_salary);
+
+ select avg(emp_salary) from emp;
+
+
+ select max(emp_salary) from emp;
+
+
+ select concat(emp_fname,emp_lname) from emp;
+
+ select upper(concat(emp_fname,emp_lname)) from emp;
+
+ select * from emp where year(join_date)='2015';
+
+ select * from emp where emp_fname like 'Ram%';
+
+
+ select * from emp where emp_id in(1,2);
+
+
+ select * from emp where emp_id in(1,3);
+
+
+ 

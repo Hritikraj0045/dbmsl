@@ -1,0 +1,29 @@
+create table areas(rad number(10), area number(10))
+Table created.
+
+declare  
+  rd number(5); 
+  area number(10,2); 
+  pi constant number(4,2):=3.14; 
+   
+begin 
+ 
+  rd:=5; 
+  while rd<=9 
+  loop 
+  area:=pi*(rd*rd); 
+  insert into areas values(rd,area); 
+  rd:=rd+1; 
+  end loop; 
+  end; 
+  
+Statement processed.
+
+
+select * from areas
+RAD	AREA
+5	79
+6	113
+7	154
+8	201
+9	254

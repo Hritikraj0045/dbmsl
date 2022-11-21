@@ -1,0 +1,177 @@
+mysql> use P2;
+Database changed
+mysql> create table employee(EmID int primary key , Ename char(10), salary int);
+Query OK, 0 rows affected (0.03 sec)
+ 
+mysql> desc employee;
++--------+----------+------+-----+---------+-------+
+| Field  | Type     | Null | Key | Default | Extra |
++--------+----------+------+-----+---------+-------+
+| EmID   | int      | NO   | PRI | NULL    |       |
+| Ename  | char(10) | YES  |     | NULL    |       |
+| salary | int      | YES  |     | NULL    |       |
++--------+----------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+ 
+mysql> insert into employee values(1,"Yash",1000);
+Query OK, 1 row affected (0.01 sec)
+ 
+mysql> insert into employee values(1,"Pratham",100);
+ERROR 1062 (23000): Duplicate entry '1' for key 'employee.PRIMARY'
+mysql> insert into employee values(2,"Pratham",100);
+Query OK, 1 row affected (0.01 sec)
+ 
+mysql> insert into employee values(3,"Pranav",101);
+Query OK, 1 row affected (0.00 sec)
+ 
+mysql> show employee;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'employee' at line 1
+mysql> show table employee;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'employee' at line 1
+mysql> desc employess;
+ERROR 1146 (42S02): Table 'p2.employess' doesn't exist
+mysql> desc employes;
+ERROR 1146 (42S02): Table 'p2.employes' doesn't exist
+mysql> desc employee;
++--------+----------+------+-----+---------+-------+
+| Field  | Type     | Null | Key | Default | Extra |
++--------+----------+------+-----+---------+-------+
+| EmID   | int      | NO   | PRI | NULL    |       |
+| Ename  | char(10) | YES  |     | NULL    |       |
+| salary | int      | YES  |     | NULL    |       |
++--------+----------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+ 
+mysql> select * from employee;
++------+---------+--------+
+| EmID | Ename   | salary |
++------+---------+--------+
+|    1 | Yash    |   1000 |
+|    2 | Pratham |    100 |
+|    3 | Pranav  |    101 |
++------+---------+--------+
+3 rows in set (0.00 sec)
+ 
+mysql> alter table employee ADD (Address varchar(20));
+Query OK, 0 rows affected (0.01 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+ 
+mysql> select * from employee;
++------+---------+--------+---------+
+| EmID | Ename   | salary | Address |
++------+---------+--------+---------+
+|    1 | Yash    |   1000 | NULL    |
+|    2 | Pratham |    100 | NULL    |
+|    3 | Pranav  |    101 | NULL    |
++------+---------+--------+---------+
+3 rows in set (0.00 sec)
+ 
+mysql> alter table employee DROP COLUMN Address;
+Query OK, 0 rows affected (0.01 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+ 
+mysql> select * from employee;
++------+---------+--------+
+| EmID | Ename   | salary |
++------+---------+--------+
+|    1 | Yash    |   1000 |
+|    2 | Pratham |    100 |
+|    3 | Pranav  |    101 |
++------+---------+--------+
+3 rows in set (0.00 sec)
+ 
+mysql> alter table employee ADD (Address varchar(20));
+Query OK, 0 rows affected (0.01 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+ 
+mysql> alter table employee MODIFY Address char(20);
+Query OK, 3 rows affected (0.02 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+ 
+mysql> select * from employee;
++------+---------+--------+---------+
+| EmID | Ename   | salary | Address |
++------+---------+--------+---------+
+|    1 | Yash    |   1000 | NULL    |
+|    2 | Pratham |    100 | NULL    |
+|    3 | Pranav  |    101 | NULL    |
++------+---------+--------+---------+
+3 rows in set (0.00 sec)
+ 
+mysql> create view details as 
+    -> select EmID,Ename
+    -> from employee
+    -> ;
+Query OK, 0 rows affected (0.01 sec)
+ 
+mysql> select * from details;
++------+---------+
+| EmID | Ename   |
++------+---------+
+|    1 | Yash    |
+|    2 | Pratham |
+|    3 | Pranav  |
++------+---------+
+3 rows in set (0.00 sec)
+ 
+mysql> create index idx_salary
+    -> on employee(Ename,salary);
+Query OK, 0 rows affected (0.02 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+ 
+mysql> select * from idx_salary;
+ERROR 1146 (42S02): Table 'p2.idx_salary' doesn't exist
+mysql> show index from employee;
++----------+------------+------------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+---------+------------+
+| Table    | Non_unique | Key_name   | Seq_in_index | Column_name | Collation | Cardinality | Sub_part | Packed | Null | Index_type | Comment | Index_comment | Visible | Expression |
++----------+------------+------------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+---------+------------+
+| employee |          0 | PRIMARY    |            1 | EmID        | A         |           3 |     NULL |   NULL |      | BTREE      |         |               | YES     | NULL       |
+| employee |          1 | idx_salary |            1 | Ename       | A         |           3 |     NULL |   NULL | YES  | BTREE      |         |               | YES     | NULL       |
+| employee |          1 | idx_salary |            2 | salary      | A         |           3 |     NULL |   NULL | YES  | BTREE      |         |               | YES     | NULL       |
++----------+------------+------------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+---------+------------+
+3 rows in set (0.00 sec)
+ 
+mysql> alter table employee
+    -> drop index idx_salary;
+Query OK, 0 rows affected (0.00 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+ 
+mysql> create table student(name char(10),rollno int);
+Query OK, 0 rows affected (0.01 sec)
+ 
+mysql> drop table student;
+Query OK, 0 rows affected (0.00 sec)
+ 
+mysql> show tables;
++--------------+
+| Tables_in_p2 |
++--------------+
+| details      |
+| employee     |
++--------------+
+2 rows in set (0.00 sec)
+ 
+mysql> create table student(name char(10),rollno int);
+Query OK, 0 rows affected (0.01 sec)
+ 
+mysql> truncate table student;
+Query OK, 0 rows affected (0.02 sec)
+ 
+mysql> show tables;
++--------------+
+| Tables_in_p2 |
++--------------+
+| details      |
+| employee     |
+| student      |
++--------------+
+3 rows in set (0.00 sec)
+ 
+mysql> desc student;
++--------+----------+------+-----+---------+-------+
+| Field  | Type     | Null | Key | Default | Extra |
++--------+----------+------+-----+---------+-------+
+| name   | char(10) | YES  |     | NULL    |       |
+| rollno | int      | YES  |     | NULL    |       |
++--------+----------+------+-----+---------+-------+
+2 rows in set (0.00 sec)

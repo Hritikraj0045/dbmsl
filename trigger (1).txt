@@ -1,0 +1,94 @@
+
+
+  create database trig;
+
+create database trige;
+
+
+  create table library(bno int, bname char(10),author char(10),alloweddays int);
+
+  use trige;
+
+  create table library(bno int, bname char(10),author char(10),alloweddays int);
+
+
+  insert into library values (1,'java','yash',10);
+
+
+  insert into library values (2,'oop','om',15);
+
+  insert into library values (3,'cpp','raj',15);
+
+  select * from library;
+
+  create table audit(bno int, old_alloweddays int, new_alloweddays int);
+
+
+  delimiter$$
+       create trigger tr1
+       before update or delete on library
+       for each row
+       begin
+       insert into audit values(:new.bno,:old.alloweddays,:new.alloweddays);
+  delimiter //
+  create trigger tr1
+       before update on library
+       for each row
+       begin
+       insert into audit values(new.bno,old.alloweddays,new.alloweddays);
+       end;
+       //
+
+  select * from library;
+       //
+
+  update library set alloweddays=15 where bno=1;
+       //
+
+
+
+  select * from library;
+       //
+
+  select * from audit;
+       //
+
+  delimiter $$
+  create trigger tr2
+       after update on library
+       for each row
+       begin
+       insert into audit values(new.bno,old.alloweddays,new.alloweddays);
+       end;
+       $$
+
+  select * from library;
+       $$
+
+  update library set alloweddays=20 where bno=2;
+       $$
+
+  select * from library;
+       $$
+
+  select * from audit;
+       $$
+
+  delimiter //
+  create trigger tr3
+       before delete
+       for each row
+       begin
+       insert into audit values(new.bno,old.alloweddays,new.alloweddays);
+       end;
+       //
+begin
+insert into audit values(new.bno,old.alloweddays,new.allowedd);
+  delimiter //
+  create trigger tr4
+       before delete on library
+       for each row
+       begin
+       insert into audit values(new.bno,old.alloweddays,new.alloweddays);
+       end;
+       //

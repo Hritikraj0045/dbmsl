@@ -1,0 +1,48 @@
+aggregate functions---------------------------------
+> db.Student.aggregate({$group:{_id:"$Name","Total":{$sum:"$Marks"}}});
+{ "_id" : "Pranav", "Total" : 72 }
+{ "_id" : "Yash", "Total" : 200 }
+{ "_id" : "Mahesh", "Total" : 207 }
+{ "_id" : "Pratham", "Total" : 165 }
+
+
+> db.Student.aggregate({$group:{_id:"$Name","Total":{$min:"$Marks"}}});
+{ "_id" : "Pratham", "Total" : 75 }
+{ "_id" : "Pranav", "Total" : 72 }
+{ "_id" : "Yash", "Total" : 54 }
+{ "_id" : "Mahesh", "Total" : 65 }
+
+
+> db.Student.aggregate({$group:{_id:"$Name","Total":{$avg:"$Marks"}}});
+{ "_id" : "Pratham", "Total" : 82.5 }
+{ "_id" : "Pranav", "Total" : 72 }
+{ "_id" : "Mahesh", "Total" : 69 }
+{ "_id" : "Yash", "Total" : 66.66666666666667 }
+
+
+> db.Student.aggregate({$group:{_id:"$Name","Total":{$max:"$Marks"}}});
+{ "_id" : "Pratham", "Total" : 90 }
+{ "_id" : "Pranav", "Total" : 72 }
+{ "_id" : "Mahesh", "Total" : 73 }
+{ "_id" : "Yash", "Total" : 74 }
+
+
+> db.Student.aggregate({$group:{_id:"$Name","Total":{$first:"$Marks"}}});
+{ "_id" : "Mahesh", "Total" : 73 }
+{ "_id" : "Pratham", "Total" : 90 }
+{ "_id" : "Pranav", "Total" : 72 }
+{ "_id" : "Yash", "Total" : 74 }
+
+
+> db.Student.aggregate({$group:{_id:"$Name","Total":{$push:"$Marks"}}});
+{ "_id" : "Pranav", "Total" : [ 72 ] }
+{ "_id" : "Yash", "Total" : [ 74, 72, 54 ] }
+{ "_id" : "Mahesh", "Total" : [ 73, 69, 65 ] }
+{ "_id" : "Pratham", "Total" : [ 90, 75 ] }
+
+
+> db.Student.aggregate({$group:{_id:"$Name","Total":{$sum:1}}});
+{ "_id" : "Pratham", "Total" : 2 }
+{ "_id" : "Pranav", "Total" : 1 }
+{ "_id" : "Mahesh", "Total" : 3 }
+{ "_id" : "Yash", "Total" : 3 }

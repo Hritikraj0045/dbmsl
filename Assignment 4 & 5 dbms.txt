@@ -1,0 +1,117 @@
+mysql> create database student;
+    -> @@
+Query OK, 1 row affected (0.03 sec)
+
+mysql> delimiter ;
+mysql> use student;
+Database changed
+mysql> create table borrow(roll_no int,name varchar(20),date_issue date,book
+_name varchar(20),status varchar(10));
+Query OK, 0 rows affected (0.07 sec)
+
+mysql> create table fine (roll_no int,date_1 date,amt int);
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> insert into borrow values (1,'Om',2022-09-17,'Robert Lafore','Issued'
+);
+ERROR 1292 (22007): Incorrect date value: '1996' for column 'date_issue' at row 1
+mysql> insert into borrow values (1,'Om','2022-09-17','Robert Lafore','Issued');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into borrow values (2,'Kundan','2022-09-12','Robert Lafore','Issued');
+Query OK, 1 row affected (0.02 sec)
+
+mysql> insert into borrow values (3,'Yash','2022-10-11','BV Ramna','Issued');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into borrow values (4,'Mahesh','2022-10-11','Hands on ML','Returned');
+Query OK, 1 row affected (0.02 sec)
+
+mysql> select * from borrow;
++---------+--------+------------+---------------+----------+
+| roll_no | name   | date_issue | book_name     | status   |
++---------+--------+------------+---------------+----------+
+|       1 | Om     | 2022-09-17 | Robert Lafore | Issued   |
+|       2 | Kundan | 2022-09-12 | Robert Lafore | Issued   |
+|       3 | Yash   | 2022-10-11 | BV Ramna      | Issued   |
+|       4 | Mahesh | 2022-10-11 | Hands on ML   | Returned |
++---------+--------+------------+---------------+----------+
+4 rows in set (0.00 sec)
+
+mysql> Delimiter $$
+mysql> create procedure B_1(Roll_new int, book_name varchar(50))
+    -> begin
+    -> declare x int;
+    -> declare continue handler for not found
+    -> begin
+    -> select 'NOT FOUND';
+    -> end;
+    -> select datediff(curdate(),date_issue) into x from borrow where Roll_no=Roll_new;
+    -> if(x>15 && x<30)
+    -> then
+    -> insert into fine values(Roll_new,curdate(),(x*5));
+    -> end if;
+    -> if(x>30)
+    -> then
+    -> insert into fine values(Roll_new,curdate(),(x*50));
+    -> end if;
+    -> end;
+    -> $$
+Query OK, 0 rows affected, 1 warning (0.03 sec)
+
+mysql> call B_1(1,'Robert Lafore'); $$
+Query OK, 1 row affected (0.02 sec)
+
+mysql> select * from fine;
+    -> $$
++---------+------------+------+
+| roll_no | date_1     | amt  |
++---------+------------+------+
+|       1 | 2022-11-16 | 3000 |
++---------+------------+------+
+1 row in set (0.00 sec)
+
+mysql> create procedure B_2(Roll_new int, book_name varchar(50))
+    -> begin
+    -> declare x int;
+    -> declare continue handler for not found
+    -> begin
+    -> select 'NOT FOUND';
+    -> end;
+    -> select datediff(curdate(),date_issue) into x from borrow where Roll_no=Roll_new;
+    -> if(x>15 && x<30)
+    -> then
+    -> insert into fine values(Roll_new,curdate(),(x*5));
+    -> end if;
+    -> if(x>30)
+    -> then
+    -> insert into fine values(Roll_new,curdate(),(x*50));
+    -> end if;
+    -> update borrow set Status='Returned' where Roll_no=Roll_new;
+    -> end;
+    -> $$
+Query OK, 0 rows affected, 1 warning (0.02 sec)
+
+mysql> call B_2(2,'Robert Lafore');$$
+Query OK, 1 row affected (0.02 sec)
+
+mysql> select * from fine;
+    -> $$
++---------+------------+------+
+| roll_no | date_1     | amt  |
++---------+------------+------+
+|       1 | 2022-11-16 | 3000 |
+|       2 | 2022-11-16 | 3250 |
++---------+------------+------+
+2 rows in set (0.00 sec)
+
+mysql> select * from borrow;$$
++---------+--------+------------+---------------+----------+
+| roll_no | name   | date_issue | book_name     | status   |
++---------+--------+------------+---------------+----------+
+|       1 | Om     | 2022-09-17 | Robert Lafore | Issued   |
+|       2 | Kundan | 2022-09-12 | Robert Lafore | Returned |
+|       3 | Yash   | 2022-10-11 | BV Ramna      | Issued   |
+|       4 | Mahesh | 2022-10-11 | Hands on ML   | Returned |
++---------+--------+------------+---------------+----------+
+4 rows in set (0.00 sec)
